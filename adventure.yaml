@@ -1,0 +1,76 @@
+adventure:
+  name: "The unfortunate loss of a mushroom"
+  start: dungeon
+  intro: |
+    You wake up in a dark and dingy dungeon cell. Water drips from the ceiling,
+    and the walls are moist. The iron bars in front of the window seem rusted,
+    but are still holding up. The door is made from very solid looking old oak.
+    A pile of straw lies in the corner, although who ever tossed you into here
+    did not do you the curtesy of dropping you on the straw.
+  rooms:
+    dungeon:
+      description:
+        Your cell is a dark, musty wet and cold room. Bare stone walls, rusty
+        bars in front of the window and a very solid looking door dominate it.
+        There is a pile of straw in the corner.
+      actions:
+        - name: Search the Straw
+          yields:
+            - skull_key
+          text: |
+            You dig through the damp straw. After a while of searching, you
+            find an old bone, roughly filed into the shape of a key. You wonder
+            how it came to be here, but decide that some questions should
+            rather be left unanswered.
+          depends:
+            not:
+              - skull_key
+        - name: Scream for help
+          text: |
+            You cry out with all your might. The deep desperation of the lost
+            echoes in you voice, and you feel like a hundred fallen souls
+            join in with your cry. When your breath runs out, nothing
+            remains but deafening silence, and the certainty that shouting
+            will not avail you here.
+        - name: Try the key in the door
+          text: |
+            Still puzzling about why there is a key in your cell you decide to
+            try your luck with the door. To your surprise, the key fits into the
+            old lock, and when you turn it the bolt slides back. When you take
+            out the key again you wonder if it didn't only have two teeth
+            earlier. But that is of little importance now, as you step into
+            the corridor.
+          transition: corridor
+          depends:
+            on:
+              - skull_key
+    corridor:
+      description: |
+        A dark corridor full of locked doors leading to cells, and a twisting
+        stair leading upwards. The door to your cell stands slightly ajar.
+        You have the odd feeling that you are being watched from the empty\
+        cells, but there is nothing in them but bits of straw, and puddles
+        of water on the floor.
+      actions:
+        - name: Walk up the stairs
+          text: |
+            As soon as you reach the bottom of the stairs you can hear rough
+            voices coming down from above. It appears that there are two men
+            at the top of the stairs, playing a game of dice. Deciding that
+            you will not give in to chance, you step back.
+        - name: Give Up
+          text: |
+            You decide to give up. Nothing happens. After having given up for a
+            while you then decide that it was a silly idea, and keep on going.
+            You make a mental note of considering the philosophy of this later
+            on.
+  assets:
+    music:
+      hoist_the_colors:
+        # Unit length in seconds
+        unit_length: 4.0
+        voices:
+          - instrument: synth
+            # f4 aes4. a8 a4 a2 a8 a bes4 bes a d1 r1 d'4 
+            notes: |
+              f2. c, f' c, f2 f4 as g f g1 r4 g2. c g2 g4 c8 c2 g4 as g c2 es4 f2.
