@@ -39,7 +39,7 @@ pub struct Room {
     pub actions: Vec<Action>,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Default)]
 pub struct Action {
     pub name: String,
     #[serde(default)]
@@ -49,6 +49,8 @@ pub struct Action {
     pub depends: ActionDependencies,
     #[serde(default)]
     pub transition: Option<String>,
+    #[serde(default)]
+    pub music: Option<String>,
 }
 
 #[derive(Deserialize, Clone, Default)]

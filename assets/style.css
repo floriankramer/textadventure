@@ -1,0 +1,78 @@
+
+:root {
+  --background-lower: #111;
+  --background: #1f1f1f; 
+
+  background-color: var(--background-lower);
+  color: rgb(196, 199, 197);
+
+  font-family: Inter;
+  font-size: 10px;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url(font/Inter-Regular.ttf);
+}
+
+body {
+  font-size: 16pt;
+}
+
+.container {
+  top: 0; 
+  bottom: 0; 
+  left: 0;
+  right: 0;
+  position: absolute;
+
+  padding: 3rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+
+}
+
+.maintext {
+  overflow: scroll;
+
+  flex-grow: 1;
+  font-size: 13pt;
+
+  padding: 2rem;
+
+  border-radius: 3rem;
+  background-color: var(--background);
+}
+
+.actions {
+  min-height: 12rem;
+  overflow: scroll;
+
+  padding: 2rem;
+
+  border-radius: 3rem;
+  background-color: var(--background);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: #57ab5a;
+}
+
+a:hover {
+  color: #6ac46d;
+}
+
+a.location_change {
+  color: #e0823d;
+}
+
+a.location_change:hover {
+  color: #f69d50;
+}

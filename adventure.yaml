@@ -22,6 +22,7 @@ adventure:
             find an old bone, roughly filed into the shape of a key. You wonder
             how it came to be here, but decide that some questions should
             rather be left unanswered.
+          music: hoist_the_colors
           depends:
             not:
               - skull_key
@@ -58,6 +59,7 @@ adventure:
             voices coming down from above. It appears that there are two men
             at the top of the stairs, playing a game of dice. Deciding that
             you will not give in to chance, you step back.
+          music: drunken_sailor
         - name: Give Up
           text: |
             You decide to give up. Nothing happens. After having given up for a
@@ -68,9 +70,19 @@ adventure:
     music:
       hoist_the_colors:
         # Unit length in seconds
-        unit_length: 4.0
+        unit_length: 2.0
         voices:
           - instrument: synth
-            # f4 aes4. a8 a4 a2 a8 a bes4 bes a d1 r1 d'4 
             notes: |
-              f2. c, f' c, f2 f4 as g f g1 r4 g2. c g2 g4 c8 c2 g4 as g c2 es4 f2.
+              f2. c, f' c, f2 f4 as g f g1 r4 g2. c, g'2 g4 c,8 c2 g4 as g c2 es4 f2.
+      drunken_sailor:
+        # Unit length in seconds
+        unit_length: 1.2
+        voices:
+          - instrument: synth
+            notes: |
+              a4 a8 a a4 a8 a a4 d, f a g g8 g g4 g8 g g4 c, e g a a8 a a4 a8 a a4 b c d c a g e d2 d
+          - instrument: synth
+            notes: |
+              d,4 d' a d d, d' a d c, c' g c  c, c' g c d, d' a d d, d' a d f, f' c, c' d, d' a d
+               
