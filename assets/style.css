@@ -76,3 +76,7 @@ a.location_change {
 a.location_change:hover {
   color: #f69d50;
 }
+
+#reset {
+  color: #555;
+}

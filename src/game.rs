@@ -5,6 +5,7 @@ use std::{
 };
 
 use anyhow::{anyhow, Context, Result};
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::{closure::Closure, JsCast, JsValue};
 use web_sys::HtmlElement;
 
@@ -46,6 +47,8 @@ impl Game {
     }];
 
     Self::update_actions(&mut data, self.data.clone(), &actions)?;
+
+    Self::load(&mut data, self.data.clone());
 
     Ok(())
   }
@@ -162,6 +165,9 @@ impl Game {
             log::error!("Unable to update the actions: {err:#}");
           }
         }
+
+        // Save the new state
+        Self::save(&mut data);
       });
 
       link.set_onclick(Some(callback.as_ref().unchecked_ref()));
@@ -174,6 +180,59 @@ impl Game {
     }
 
     Ok(())
+  }
+
+  fn save(data: &mut GameData) {
+    let save = SaveGame {
+      current_text: data.current_text.clone(),
+      inventory: data.inventory.clone().into_iter().collect(),
+      current_room: data.current_room.clone(),
+    };
+
+    let serialized = serde_json::to_string(&save).unwrap();
+
+    let window = web_sys::window().unwrap();
+    window
+      .local_storage()
+      .unwrap()
+      .unwrap()
+      .set("textadventure_save", &serialized)
+      .unwrap();
+  }
+
+  fn load(data: &mut GameData, data_ptr: Rc<Mutex<GameData>>) {
+    let window = web_sys::window().unwrap();
+    if let Some(save) = window
+      .local_storage()
+      .unwrap()
+      .unwrap()
+      .get_item("textadventure_save")
+      .unwrap()
+    {
+      let parsed = serde_json::from_str::<SaveGame>(&save);
+      if let Ok(save) = parsed {
+        data.inventory = save.inventory.into_iter().collect();
+
+        Self::goto_room(data, data_ptr.clone(), &save.current_room);
+
+        data.current_text = save.current_text;
+        data.text_element.set_inner_html(&data.current_text);
+      } else {
+        log::warn!("Found malformed save data: {save}");
+      }
+    }
+  }
+
+  fn reset() {
+    let window = web_sys::window().unwrap();
+    window
+      .local_storage()
+      .unwrap()
+      .unwrap()
+      .remove_item("textadventure_save")
+      .unwrap();
+
+    window.location().set_href("/").unwrap();
   }
 }
 
@@ -204,6 +263,16 @@ impl TryFrom<Adventure> for Game {
       .dyn_into()
       .map_err(|_| anyhow!("maintext ist not an html element"))?;
 
+    let reset_element: HtmlElement = document
+      .get_element_by_id("reset")
+      .ok_or(anyhow!("Missing a #reset element in the dom"))?
+      .dyn_into()
+      .map_err(|_| anyhow!("reset ist not an html element"))?;
+
+    let reset_callback = Closure::<dyn FnMut()>::new(Self::reset);
+    reset_element.set_onclick(Some(reset_callback.as_ref().unchecked_ref()));
+    reset_callback.forget();
+
     let data = GameData {
       intro: value.intro,
       rooms: value.rooms,
@@ -224,4 +293,11 @@ impl TryFrom<Adventure> for Game {
 
 fn js_to_anyhow(val: JsValue) -> anyhow::Error {
   anyhow!("{val:?}")
+}
+
+#[derive(Serialize, Deserialize)]
+struct SaveGame {
+  current_text: String,
+  inventory: Vec<String>,
+  current_room: String,
 }
